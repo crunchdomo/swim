@@ -41,6 +41,7 @@ void PredictableRateSource::preload() {
                 continue;
             }
             double rate = atof(line.c_str());
+            if (rate <= 0) continue;
 
             double duration;
             getline(fin, line);

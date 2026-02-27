@@ -35,6 +35,7 @@ void PredictableRandomSource::initialize() {
     // for SMG comparison
     maxRate = 2.0;
     minRate = 0.0;
+    rate = minRate;
     direction = 0;
 
 #if WORST_CASE

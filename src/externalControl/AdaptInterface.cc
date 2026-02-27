@@ -180,7 +180,7 @@ std::string AdaptInterface::cmdGetUtilization(const std::vector<std::string>& ar
     ostringstream reply;
     auto utilization = pProbe->getUtilization(args[0]);
     if (utilization < 0) {
-        reply << "error: server \'" << args[0] << "\' does no exist";
+        reply << "error: server \'" << args[0] << "\' does not exist";
     } else {
         reply << utilization;
     }

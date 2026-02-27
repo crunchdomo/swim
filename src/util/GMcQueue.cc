@@ -47,6 +47,9 @@ double GMcQueue::pd(double rho, double servers)
 
 double GMcQueue::queueingTime(double servers, double serviceRate, double arrivalMean, double arrivalStdDev)
 {
+    if (arrivalMean <= 0 || serviceRate <= 0) {
+        return DBL_MAX;
+    }
     double rho = 1.0 / (arrivalMean * serviceRate); // eq. 5.3.6 http://faculty.smu.edu/nbhat/chapter5.pdf
     if (rho > servers) {
         return DBL_MAX;

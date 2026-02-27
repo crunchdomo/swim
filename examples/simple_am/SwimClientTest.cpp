@@ -52,7 +52,7 @@ int main() {
         sleep(5);
         active = swim.getActiveServers();
     }
-    assert(active = newServers);
+    assert(active == newServers);
     cout << "done" << endl;
 
     swim.removeServer();

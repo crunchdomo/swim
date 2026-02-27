@@ -47,6 +47,8 @@ void ExecutionManagerMod::initialize() {
 void ExecutionManagerMod::handleMessage(cMessage *msg) {
     if (msg == completeRemoveMsg) {
         cModule* module = getSimulation()->getModule(serverBeingRemovedModuleId);
+        if (!module)
+            error("server module %d not found during removal", serverBeingRemovedModuleId);
         notifyRemoveServerCompleted(module->getName());
         module->gate("out")->disconnect();
         module->deleteModule();
@@ -62,9 +64,15 @@ void ExecutionManagerMod::handleMessage(cMessage *msg) {
 
 void ExecutionManagerMod::doAddServerBootComplete(BootComplete* bootComplete) {
     cModule *server = getSimulation()->getModule(bootComplete->getModuleId());
+    if (!server)
+        error("server module %d not found during boot complete", bootComplete->getModuleId());
     cModule* loadBalancer = getParentModule()->getSubmodule(
             LOAD_BALANCER_MODULE_NAME);
+    if (!loadBalancer)
+        error("load balancer module not found");
     cModule* sink = getParentModule()->getSubmodule(SINK_MODULE_NAME);
+    if (!sink)
+        error("sink module not found");
     // connect gates
     loadBalancer->getOrCreateFirstUnconnectedGate("out", 0, false, true)->connectTo(
             server->gate("in"));
@@ -93,12 +101,19 @@ BootComplete* ExecutionManagerMod::doAddServer(bool instantaneous) {
 
     // copy all params of the server inside the appserver module from the template
     cModule* pNewSubmodule = module->getSubmodule(INTERNAL_SERVER_MODULE_NAME);
+    if (!pNewSubmodule)
+        error("internal server submodule not found in new server module");
     if (serverCount >= 1) {
         // copy from an existing server
         stringstream templateName;
         templateName << SERVER_MODULE_NAME;
         templateName << 1;
-        cModule* pTemplateSubmodule = getParentModule()->getSubmodule(templateName.str().c_str())->getSubmodule(INTERNAL_SERVER_MODULE_NAME);
+        cModule* pTemplateModule = getParentModule()->getSubmodule(templateName.str().c_str());
+        if (!pTemplateModule)
+            error("template server module '%s' not found", templateName.str().c_str());
+        cModule* pTemplateSubmodule = pTemplateModule->getSubmodule(INTERNAL_SERVER_MODULE_NAME);
+        if (!pTemplateSubmodule)
+            error("internal server submodule not found in template server module");
 
         for (int i = 0; i < pTemplateSubmodule->getNumParams(); i++) {
             pNewSubmodule->par(i) = pTemplateSubmodule->par(i);
@@ -182,6 +197,8 @@ void ExecutionManagerMod::completeServerRemoval() {
 bool ExecutionManagerMod::isServerBeingRemoveEmpty() {
     bool isEmpty = false;
     cModule* module = getSimulation()->getModule(serverBeingRemovedModuleId);
+    if (!module)
+        return false;
     MTServer* internalServer = check_and_cast<MTServer*> (module->getSubmodule(INTERNAL_SERVER_MODULE_NAME));
     if (internalServer->isEmpty()) {
         queueing::PassiveQueue* queue = check_and_cast<queueing::PassiveQueue*> (module->getSubmodule(INTERNAL_QUEUE_MODULE_NAME));

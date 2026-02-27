@@ -133,8 +133,10 @@ Observations SimProbe::getUpdatedObservations() {
     obs.basicThroughput = getBasicThroughput();
     obs.optResponseTime = getOptResponseTime();
     obs.optThroughput = getOptThroughput();
-    obs.avgResponseTime = (obs.basicResponseTime * obs.basicThroughput + obs.optResponseTime * obs.optThroughput)
-            / (obs.basicThroughput + obs.optThroughput);
+    double totalThroughput = obs.basicThroughput + obs.optThroughput;
+    obs.avgResponseTime = (totalThroughput > 0)
+            ? (obs.basicResponseTime * obs.basicThroughput + obs.optResponseTime * obs.optThroughput) / totalThroughput
+            : 0;
 
     return obs;
 }

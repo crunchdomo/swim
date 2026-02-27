@@ -58,6 +58,7 @@ std::string HAProxySocketCommand::executeCommand(const std::string& cmd) {
         throw runtime_error("ExecutionManagerHAProxy::sendHAProxyCommand read() failed");
     }
     buffer[n] = 0;
+    close(socket_fd);
     return string(buffer);
 }
 

@@ -16,8 +16,8 @@
 
 Environment::Environment() : arrivalMean(0), arrivalVariance(0) {}
 
-Environment::Environment(double arrivalMean, double arrivalStdDev)
-    : arrivalMean(arrivalMean), arrivalVariance(arrivalStdDev) {};
+Environment::Environment(double arrivalMean, double arrivalVariance)
+    : arrivalMean(arrivalMean), arrivalVariance(arrivalVariance) {};
 
 double Environment::getArrivalMean() const {
     return arrivalMean;

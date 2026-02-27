@@ -22,6 +22,7 @@ Define_Module(ArrivalMonitor);
 void ArrivalMonitor::initialize()
 {
     interArrivalSignal = registerSignal("interArrival");
+    lastArrivalTime = SIMTIME_ZERO;
     firstArrival = true;
 }
 
