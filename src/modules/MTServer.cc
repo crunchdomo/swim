@@ -137,6 +137,10 @@ bool MTServer::isIdle() {
     return runningJobs.size() < maxThreads;
 }
 
+void MTServer::allocate() {
+    // No-op for multi-threaded server: allocation is implicit when a job arrives
+}
+
 bool MTServer::isEmpty() {
     return runningJobs.size() == 0;
 }

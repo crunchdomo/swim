@@ -24,14 +24,14 @@ simple MTBrownoutServer extends MTServer
         @signal[serviceTime](type="double");
         @statistic[serviceTime](record=vector);
         
-		double brownoutFactor = default(0.0);
-		volatile double lowFidelityServiceTime @unit(s); // service time of a low fidelity job
-		bool cacheLow = default(true); // if low fidelity requests are affected by caching effects
-		int cacheRequestCount = default(6750); // how many requests before cache is fully warmed up
-		double cacheDelta = default(0.050); // exec time increase for cold cache
-		double cacheDeltaLow = default(0.0019); // exec time increase for cold cache for low fidelity requests
-		double cachePrecision = default(0.05); // controls shape of exec time decay and how close it gets to fully warmed
-		bool cacheClearsWhenReboot = default(false);
+		double brownoutFactor @mutable = default(0.0);
+		volatile double lowFidelityServiceTime @mutable @unit(s); // service time of a low fidelity job
+		bool cacheLow @mutable = default(true); // if low fidelity requests are affected by caching effects
+		int cacheRequestCount @mutable = default(6750); // how many requests before cache is fully warmed up
+		double cacheDelta @mutable = default(0.050); // exec time increase for cold cache
+		double cacheDeltaLow @mutable = default(0.0019); // exec time increase for cold cache for low fidelity requests
+		double cachePrecision @mutable = default(0.05); // controls shape of exec time decay and how close it gets to fully warmed
+		bool cacheClearsWhenReboot @mutable = default(false);
 	
 	@class(MTBrownoutServer);
 }

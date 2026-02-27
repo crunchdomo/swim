@@ -22,8 +22,8 @@ import org.omnetpp.queueing.Server;
 simple MTServer extends Server
 {
     parameters:
-		int threads = default(1);
-		double timeout @unit(s) = default(0.0); // if an arriving job has spent this amount of time or more queueing, it is just passed without being serviced
+		int threads @mutable = default(1);
+		double timeout @mutable @unit(s) = default(0.0s); // if an arriving job has spent this amount of time or more queueing, it is just passed without being serviced
 	
 	@class(MTServer);
 }

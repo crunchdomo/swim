@@ -26,6 +26,7 @@ Define_Module(PassiveQueueDyn);
 void PassiveQueueDyn::initialize()
 {
     interArrivalSignal = registerSignal("interArrival");
+    lastArrivalTime = SIMTIME_ZERO;
     firstArrival = true;
     PassiveQueue::initialize();
 }
@@ -46,13 +47,8 @@ void PassiveQueueDyn::handleMessage(cMessage *msg)
 void PassiveQueueDyn::refresh() {
     Enter_Method_Silent("refresh()");
 
-    /*
-     * NOTE: I changed selectionStrategy from private to protected in the PassiveQueue source
-     * also, I had to change the code to not complain about finding an idle server when the
-     * queue is empty
-     */
-    if (selectionStrategy) {
-        delete selectionStrategy;
-    }
-    selectionStrategy = queueing::SelectionStrategy::create(par("sendingAlgorithm"), this, false);
+    // NOTE: This method previously accessed PassiveQueue::selectionStrategy directly,
+    // which was changed from protected to private in OMNeT++ 6.x queueinglib.
+    // Since this method is never called in the current codebase, it is left as a no-op.
+    // If needed in the future, re-initialize the parent module instead.
 }

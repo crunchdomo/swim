@@ -60,6 +60,7 @@ public:
      * This is this way to follow the semantics that PassiveQueue expect for this
      */
     virtual bool isIdle();
+    virtual void allocate() override;
 
     virtual bool isEmpty();
 };

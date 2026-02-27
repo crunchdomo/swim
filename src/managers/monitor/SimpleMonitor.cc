@@ -26,8 +26,9 @@ Define_Module(SimpleMonitor);
 
 SimpleMonitor::SimpleMonitor()
 {
-    periodEvent = 0;
-    periodPostEvent = 0;
+    periodEvent = nullptr;
+    periodPostEvent = nullptr;
+    oversamplingEvent = nullptr;
 }
 
 void SimpleMonitor::initialize(int stage) {
