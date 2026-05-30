@@ -2,3 +2,4 @@
 /.computed/
 /out/
 /gcc-debug/
+/test/run_tests

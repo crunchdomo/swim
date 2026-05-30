@@ -73,6 +73,34 @@ cd results/
 ../swim/tools/plotResults.sh SWIM_SA Reactive 1 plot.pdf
 ```
 
+## Testing
+
+There is no full-system automated test (the simulator requires the OMNeT++
+kernel + Boost to build, so a build/smoke-run can only happen in an
+environment with that toolchain installed — `cd queueinglib && make`,
+`cd src && make`, then `cd simulations/swim_sa && ./run.sh Reactive 1` and
+confirm it prints `All runs completed` with no assert failures).
+
+Standalone unit tests live in `test/` and cover the model classes that are
+**decoupled from OMNeT++** (`Configuration`, `Environment`, `Observations` —
+they only depend on the trivial pladapt mock in `src/model/pladaptMock/`).
+They build and run with just a C++ compiler — no OMNeT++, Boost, or external
+test framework (a tiny header-only harness lives in `test/test_framework.h`):
+
+```bash
+cd test && make test
+```
+
+Add new cases with `TEST(name) { CHECK(...); CHECK_EQ(...); CHECK_NEAR(...); }`;
+tests self-register. Note that classes pulling in `omnetpp.h` (e.g. `Model`,
+`UtilityScorer`, the managers, and `modules/`) cannot be unit-tested this way
+and need the full simulator build.
+
+There is also a pre-existing **integration smoke test**, `examples/simple_am/
+SwimClientTest.cpp` (`make test` in that dir): it drives a *running* SWIM
+instance over the TCP interface (`localhost:4242`) via `SwimClient`, so it
+requires a live simulation and Boost.Asio.
+
 ## Architecture
 
 ### Core Layers (all in `src/`)
